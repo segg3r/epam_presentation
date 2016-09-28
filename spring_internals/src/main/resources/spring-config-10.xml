@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:annotation-config />
+
+	<bean id="firstService" class="by.segg3r.epam.presentation.springinternals.beans.FirstService" />
+	<bean id="secondService" class="by.segg3r.epam.presentation.springinternals.beans.SecondService" />
+	<bean id="singleton" class="by.segg3r.epam.presentation.springinternals.beans.Singleton" />
+	<bean id="prototype" class="by.segg3r.epam.presentation.springinternals.beans.Prototype"
+		scope="prototype" /> 
+		
+	<bean id="factoryBean" class="by.segg3r.epam.presentation.springinternals.beans.Factory"
+		factory-method="factoryBean" />
+	
+</beans>

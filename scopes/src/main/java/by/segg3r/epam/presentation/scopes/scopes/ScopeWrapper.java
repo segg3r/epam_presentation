@@ -5,14 +5,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 
 import com.google.common.collect.Lists;
 
-public class ScopeWrapper implements BeanDefinitionRegistryPostProcessor {
+public class ScopeWrapper implements BeanFactoryPostProcessor {
 
 	private Scope scope;
 	private String scopeName;
@@ -25,21 +24,14 @@ public class ScopeWrapper implements BeanDefinitionRegistryPostProcessor {
 	}
 
 	@Override
-	public void postProcessBeanDefinitionRegistry(
-			BeanDefinitionRegistry registry) throws BeansException {
-		this.scopeBeanDefinitions = Lists.newArrayList(registry.getBeanDefinitionNames()).stream()
-			.filter(beanDefinitionName -> {
-				BeanDefinition beanDefinition = registry.getBeanDefinition(beanDefinitionName);
-				return scopeName.equals(beanDefinition.getScope());
-			})
-			.collect(Collectors.toList());
-	}
-	
-	@Override
 	public void postProcessBeanFactory(
 			ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		// do nothing
-		return;
+		this.scopeBeanDefinitions = Lists.newArrayList(beanFactory.getBeanDefinitionNames()).stream()
+				.filter(beanDefinitionName -> {
+					BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+					return scopeName.equals(beanDefinition.getScope());
+				})
+				.collect(Collectors.toList());
 	}
 
 	public void clear() {

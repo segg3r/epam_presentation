@@ -9,7 +9,7 @@ import by.segg3r.epam.presentation.scopes.entity.Service;
 import by.segg3r.epam.presentation.scopes.scopes.ScopeWrapper;
 
 
-public class ScopeWrapperRunner {
+public class CustomScopeRunner2 {
 
 	@SuppressWarnings({ "resource",  })
 	public static void main(String[] args) {
@@ -28,8 +28,6 @@ public class ScopeWrapperRunner {
 		System.out.println(logger);
 		service = ctx.getBean(Service.class);
 		System.out.println(service);
-		
-		// but why would i need custom scope???
 	}
 
 }

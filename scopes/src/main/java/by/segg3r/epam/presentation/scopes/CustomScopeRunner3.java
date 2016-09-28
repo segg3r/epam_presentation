@@ -6,7 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import by.segg3r.epam.presentation.scopes.config.SimpleThreadScopeConfig;
 import by.segg3r.epam.presentation.scopes.entity.Logger;
 
-public class SimpleThreadScopeRunner {
+public class CustomScopeRunner3 {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
@@ -22,8 +22,6 @@ public class SimpleThreadScopeRunner {
 		
 		new Thread(r).start();
 		new Thread(r).start();
-		
-		// but what if we are using thread pool???
 	}
 
 }
