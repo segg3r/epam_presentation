@@ -3,7 +3,7 @@ package by.segg3r.epam.presentation.scopes.entity.associatable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -32,8 +32,8 @@ public class AssociatableExecutorFactory {
 							for (int i = 0; i < args.length; i++) {
 								Object arg = args[i];
 								
-								if (List.class.isAssignableFrom(arg.getClass())) {
-									args[i] = ((List) arg).stream().map((listItem) -> {
+								if (Collection.class.isAssignableFrom(arg.getClass())) {
+									args[i] = ((Collection) arg).stream().map((listItem) -> {
 										return tryToWrapSingleObject(listItem);
 									})
 									.collect(Collectors.toList());
@@ -58,10 +58,8 @@ public class AssociatableExecutorFactory {
 
 					private Callable<?> wrapCallable(Callable<?> callable) {
 						Map<String, Object> callingThreadContext = scope.getCurrentThreadContext();
-						
 						return () -> {
 							scope.replaceContext(callingThreadContext);
-							
 							try {
 								return callable.call();
 							} finally {
@@ -72,10 +70,8 @@ public class AssociatableExecutorFactory {
 					
 					private Runnable wrapRunnable(Runnable runnable) {
 						Map<String, Object> callingThreadContext = scope.getCurrentThreadContext();
-						
 						return () -> {
 							scope.replaceContext(callingThreadContext);
-							
 							try {
 								runnable.run();
 							} finally {

@@ -12,7 +12,7 @@ public class HelloWorldBFPP implements BeanFactoryPostProcessor {
 			throws BeansException {
 		for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
 			BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
-			System.out.println("BFPP : " + beanDefinitionName + "; " + beanDefinition.getClass());
+			System.out.println("BFPP : " + beanDefinitionName + "; " + beanDefinition.getClass().getSimpleName());
 		}
 	}
 

@@ -31,6 +31,7 @@ public class CustomScopeRunner5 {
 		executor.awaitTermination(10, TimeUnit.SECONDS);
 		
 		System.out.println(ctx.getBean(Logger.class).getEvents());
+		System.out.println("Current thread is " + Thread.currentThread().getId());
 	}
 
 }

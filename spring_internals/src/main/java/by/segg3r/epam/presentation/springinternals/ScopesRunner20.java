@@ -15,6 +15,8 @@ public class ScopesRunner20 {
 		
 		userService.doSomething("admin@admin.com");
 		userService.doSomething("user@user.com");
+		
+		System.out.println(userService.getClass());
 	}
 
 }

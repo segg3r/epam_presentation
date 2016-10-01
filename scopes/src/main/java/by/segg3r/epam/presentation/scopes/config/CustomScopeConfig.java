@@ -16,12 +16,12 @@ import com.google.common.collect.Maps;
 public class CustomScopeConfig {
 
 	@Bean
-	public CustomScope simpleThreadScope() {
+	public CustomScope customScope() {
 		return new CustomScope();
 	}
 	
 	@Bean
-	public CustomScopeConfigurer simpleThreadScopeConfigurer(CustomScope customScope) {
+	public CustomScopeConfigurer customScopeConfigurer(CustomScope customScope) {
 		CustomScopeConfigurer configurer = new CustomScopeConfigurer();
 		
 		Map<String, Object> scopes = Maps.newHashMap();

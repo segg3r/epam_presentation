@@ -39,5 +39,10 @@ public class ScopeWrapper implements BeanFactoryPostProcessor {
 			scope.remove(beanDefinitionName);
 		}
 	}
+
+	public Scope getScope() {
+		return scope;
+	}
+	
 	
 }
