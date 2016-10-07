@@ -48,10 +48,8 @@ public class LookupFixBFPP implements BeanPostProcessor,
 					.filter(methodOverride -> {
 						return beanName.equals(methodOverride.beanName);
 					}).collect(toList());
-
 			if (beanMethodOverrides.isEmpty())
 				return bean;
-
 			return createProxy(bean, beanMethodOverrides);
 		} catch (Exception e) {
 			throw new FatalBeanException("Could not fix lookup.", e);
@@ -63,23 +61,19 @@ public class LookupFixBFPP implements BeanPostProcessor,
 		ProxyFactory factory = new ProxyFactory();
 		factory.setSuperclass(bean.getClass());
 		Class<?> clazz = factory.createClass();
-
 		MethodHandler handler = new MethodHandler() {
-
 			@Override
 			public Object invoke(Object self, Method overridden,
 					Method forwarder, Object[] args) throws Throwable {
 				for (MethodOverride methodOverride : beanMethodOverrides) {
-					if (methodOverride.method.equals(overridden)) {
+					if (methodOverride.methodSignature
+							.equals(getMethodSignature(overridden))) {
 						return beanFactory.getBean(methodOverride.resultBeanName);
 					}
 				}
-
 				return forwarder.invoke(self, args);
 			}
-
 		};
-
 		Object instance = clazz.newInstance();
 		((ProxyObject) instance).setHandler(handler);
 		return instance;
@@ -123,7 +117,7 @@ public class LookupFixBFPP implements BeanPostProcessor,
 						}
 
 						result.add(new MethodOverride(beanDefinitionName,
-								method, beanNames[0]));
+								getMethodSignature(method), beanNames[0]));
 					}
 				}
 			}
@@ -140,29 +134,39 @@ public class LookupFixBFPP implements BeanPostProcessor,
 
 	private Class<?> getJavaConfigBeanType(BeanDefinition beanDefinition)
 			throws Exception {
-		Object configBeanDefinition = getJavaConfigBeanDefinitionClass().cast(
-				beanDefinition);
 		MethodMetadata methodMetadata = MethodMetadata.class.cast(PropertyUtils
-				.getProperty(configBeanDefinition, "factoryMethodMetadata"));
+				.getProperty(beanDefinition, "factoryMethodMetadata"));
 		Class<?> beanClass = Class.forName(methodMetadata.getReturnTypeName());
 		return beanClass;
 	}
 
 	private Class<?> getJavaConfigBeanDefinitionClass() throws Exception {
 		return Class
-				.forName("org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader$ConfigurationClassBeanDefinition");
+		.forName("org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader$ConfigurationClassBeanDefinition");
+	}
+	
+	private static String getMethodSignature(Method method) {
+		StringBuilder result = new StringBuilder();
+		result.append(method.getReturnType().getCanonicalName());
+		result.append(" ");
+		result.append(method.getName());
+		for (Class<?> parameterType : method.getParameterTypes()) {
+			result.append(" ");
+			result.append(parameterType.getCanonicalName());
+		}
+		return result.toString();
 	}
 
 	private static final class MethodOverride {
 		private String beanName;
-		private Method method;
+		private String methodSignature;
 		private String resultBeanName;
 
-		public MethodOverride(String beanName, Method method,
+		public MethodOverride(String beanName, String methodSignature,
 				String resultBeanName) {
 			super();
 			this.beanName = beanName;
-			this.method = method;
+			this.methodSignature = methodSignature;
 			this.resultBeanName = resultBeanName;
 		}
 	}
