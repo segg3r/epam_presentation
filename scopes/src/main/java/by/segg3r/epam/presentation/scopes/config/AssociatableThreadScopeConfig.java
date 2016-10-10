@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 import by.segg3r.epam.presentation.scopes.entity.Logger;
 import by.segg3r.epam.presentation.scopes.entity.associatable.AssociatableExecutorFactory;
@@ -38,7 +39,7 @@ public class AssociatableThreadScopeConfig {
 	}
 	
 	@Bean
-	@Scope("thread")
+	@Scope(value = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
 	public Logger logger() {
 		return new Logger();
 	}

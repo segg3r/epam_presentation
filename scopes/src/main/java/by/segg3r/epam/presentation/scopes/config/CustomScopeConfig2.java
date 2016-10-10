@@ -7,32 +7,33 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.context.support.SimpleThreadScope;
 
 import by.segg3r.epam.presentation.scopes.entity.Logger;
+import by.segg3r.epam.presentation.scopes.scopes.CustomScope;
 
 import com.google.common.collect.Maps;
 
-
 @Configuration
-public class SimpleThreadScopeConfig {
+public class CustomScopeConfig2 {
+
 	@Bean
-	public SimpleThreadScope simpleThreadScope() {
-		return new SimpleThreadScope();
+	public CustomScope customScope() {
+		return new CustomScope();
 	}
+	
 	@Bean
-	public CustomScopeConfigurer simpleThreadScopeConfigurer(
-			SimpleThreadScope simpleThreadScope) {
+	public CustomScopeConfigurer customScopeConfigurer(CustomScope customScope) {
 		CustomScopeConfigurer configurer = new CustomScopeConfigurer();
 		
 		Map<String, Object> scopes = Maps.newHashMap();
-		scopes.put("thread", simpleThreadScope);
+		scopes.put("custom", customScope);
 		configurer.setScopes(scopes);
 
 		return configurer;
 	}
+	
 	@Bean
-	@Scope(value = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
+	@Scope(value = "custom", proxyMode = ScopedProxyMode.TARGET_CLASS)
 	public Logger logger() {
 		return new Logger();
 	}
